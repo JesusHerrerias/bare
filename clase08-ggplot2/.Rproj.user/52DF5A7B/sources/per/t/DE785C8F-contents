@@ -1,0 +1,114 @@
+# Librerías =====
+library(tidyverse)
+
+# Lectura ====
+delitos <- readr::read_csv('data/raw/Municipal-Delitos-2015-2020_nov2020.csv',
+                            locale = locale(encoding = 'latin1')) %>%
+    janitor::clean_names()
+
+# Análisis ====
+# ¿Cómo ha cambiado es el delito más prevalente en México a lo largo de los años?
+delitos %>% 
+    filter(ano == 2015) %>% 
+    group_by(ano) %>% 
+    summarise(total_enero = sum(enero))
+
+delitos %>% 
+    filter(ano == 2015) %>% 
+    group_by(ano) %>% 
+    summarise(across(enero:diciembre, ~ sum(.x))) %>% 
+    mutate(total = enero + febrero + marzo) %>% 
+    relocate(total, .after = ano)
+
+# pivots =====
+
+# 1. tidyr::pivot_longer() ----
+# anterior: tidyr::gather()
+?gather
+?pivot_longer
+delitos %>% 
+    filter(ano == 2015) %>% 
+    pivot_longer(enero:diciembre) %>% 
+    relocate(name, value) 
+
+# los primeros 12 valores del nuevo frame corresponden a las 12 columnas del 
+# primer valor del frame anterior
+delitos %>% 
+    filter(ano == 2015) %>% 
+    slice_head(n = 1) %>% 
+    View()
+
+# Asignamos
+delitos_long <- delitos %>% 
+    pivot_longer(enero:diciembre, 
+                 names_to = 'mes', 
+                 values_to = 'delitos') %>% 
+    select(ano, entidad, municipio, tipo_de_delito, subtipo_de_delito, mes, delitos)
+
+delitos_long %>% 
+    group_by(ano, tipo_de_delito) %>% 
+    summarise(total_delitos = sum(delitos, na.rm = NA), .groups = 'keep') %>% 
+    filter(total_delitos == max(total_delitos)) %>% 
+    ungroup()
+
+
+# prefijos: fec_*, fecha.*, *_h, *_m
+tidyr::billboard
+billboard %>%
+    pivot_longer(
+        cols = starts_with("wk"),
+        names_to = "week",
+        values_to = "rank",
+        names_prefix = "wk",
+        values_drop_na = TRUE,
+    )
+
+
+# Cuántos personas de 15 a 44 años presentaron caso de TB?
+?tidyr::who
+who %>%
+    pivot_longer(
+    cols = new_sp_m014:newrel_f65,
+    names_to = c("diagnosis", "gender", "age"),
+    names_pattern = "new_?(.*)_(.)(.*)",
+    values_to = "count"
+)
+
+# 2. tidyr::pivot_wider() ----
+?pivot_wider
+
+# Funcionalidad mínima 
+?fish_encounters
+fish_encounters %>%
+    pivot_wider(names_from = station, values_from = seen)
+
+# En ciertos casos, no hay simetría
+delitos_long %>% 
+    filter(ano == 2015, entidad == 'Aguascalientes') %>% 
+    pivot_wider(names_from = mes, values_from = delitos)
+
+delitos_long %>% 
+    filter(ano == 2015, entidad == 'Aguascalientes') %>% 
+    group_by(ano, entidad, municipio, tipo_de_delito, subtipo_de_delito, mes) %>% 
+    summarise(conteo = n()) %>% 
+    filter(conteo != 1)
+
+
+delitos_long %>% 
+    filter(ano == 2015, entidad == 'Aguascalientes', mes == 'abril', tipo_de_delito == 'Feminicidio')  %>% 
+    pivot_wider(names_from = mes, values_from = delitos) %>% 
+    relocate(abril)
+
+delitos_long %>% 
+    filter(ano == 2015, entidad == 'Aguascalientes', mes == 'abril')  %>% 
+    pivot_wider(names_from = mes, values_from = delitos, 
+                id_cols = ano:municipio) %>% 
+    relocate(abril)
+
+delitos_long %>% 
+    filter(ano == 2015, entidad == 'Aguascalientes', mes == 'abril')  %>% 
+    pivot_wider(names_from = mes, values_from = delitos, 
+                id_cols = ano:tipo_de_delito) %>% 
+    relocate(abril)
+
+

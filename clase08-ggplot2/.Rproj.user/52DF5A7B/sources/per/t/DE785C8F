@@ -1,0 +1,24 @@
+{
+    "id": "DE785C8F",
+    "path": "~/Cursos/R/curso_maestria/clases_scripts/clase07-joins/src/04-tidyr.R",
+    "project_path": null,
+    "type": "r_source",
+    "hash": "3726315669",
+    "contents": "",
+    "dirty": false,
+    "created": 1609386173625.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "cursorPosition": "59,8",
+        "scrollLine": "47"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1609295471,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1609295471,
+    "read_only": false,
+    "read_only_alternatives": []
+}

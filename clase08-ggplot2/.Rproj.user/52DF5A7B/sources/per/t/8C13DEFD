@@ -1,0 +1,25 @@
+{
+    "id": "8C13DEFD",
+    "path": "~/Cursos/R/curso_maestria/clases_scripts/clase08-ggplot2/src/02-ejercicios_geoms_y_aes.R",
+    "project_path": "src/02-ejercicios_geoms_y_aes.R",
+    "type": "r_source",
+    "hash": "4284199413",
+    "contents": "",
+    "dirty": false,
+    "created": 1609385529931.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "tempName": "Untitled1",
+        "cursorPosition": "5,10",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1609387817,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1609387817441,
+    "read_only": false,
+    "read_only_alternatives": []
+}
